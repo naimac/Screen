@@ -19,17 +19,16 @@
 class MCCScreen{
 
 	public:
-	/* constructors */
-	MCCScreen(uint16_t height, uint16_t width, uint8_t bpp, const std::string& fbDevice = "/dev/fb0");
-	MCCScreen(uint16_t height, uint16_t width, uint8_t bpp, const std::string& fbDevice, const std::string& TTYToClaim);
+	/* constructor / destructor */
+	MCCScreen();
 	MCCScreen(const MCCScreen&) = delete;
 
 	/* useful functions*/
-	void MCCSetScreen(uint16_t height, uint16_t width, uint8_t bpp, const std::string& fbDevice = "/dev/fb0", const bool& claimTTY = false, const std::string& TTYToClaim = "/dev/tty1");
+	uint8_t init(uint16_t height, uint16_t width, uint8_t bpp, const std::string& fbDevice = "/dev/fb0", const std::string& TTYToClaim = "/dev/tty1");
 	void putPixel(uint16_t x, uint16_t y, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
 	void putPixel(uint16_t x, uint16_t y, uint32_t colour);
-	void MCCUpdateScreen();
-	void MCCEraseScreen();
+	void updateScreen();
+	void eraseScreen();
 
 	/* destructor */
 	~ MCCScreen();
@@ -38,9 +37,8 @@ class MCCScreen{
 	struct fb_fix_screeninfo MCCfInfo;
 	struct fb_var_screeninfo MCCvInfo;
 	int MCCfb, MCCtty;
-	uint8_t MCCscreenSelection;
+	uint8_t MCCscreenSelection, MCCScreenError;
 	uint64_t MCCscreenSize;
-	bool MCChasTTYBeenClaimed;
 	std::string MCCclaimedTTY;
 	char *MCCfbp; //framebuffer pointer
 };
